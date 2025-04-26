@@ -1,15 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Raleway:wght@100..900&display=swap');
 
 :root {
-
     --header-height: 60px;
-
-    --body-color: hsla(207, 10%, 21%, 0.692);
+    --body-color: hsla(0, 6%, 14%, 0.9);
     --text-color: hsla(0, 0%, 100%, 0.9);
-    --lighter-text-color: hsla(0, 0%, 100%, 0.466);
-
+    --light-text-color: hsla(0, 0%, 100%, 0.262);
+    --lighter-text-color: hsla(0, 0%, 100%, 0.04);
+    --lightest-text-color: hsla(0, 0%, 100%, 0.009);
     --body-font: 'Montserrat', sans-serif;
-
     --weight-100: 100;
     --weight-200: 200;
     --weight-300: 300;
@@ -17,9 +15,9 @@
     --weight-500: 500;
     --weight-600: 600;
     --weight-700: 700;
+    --transition-speed: 0.4s;
+    --easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-
-/*  */
 
 * {
     margin: 0;
@@ -27,79 +25,289 @@
     box-sizing: border-box;
 }
 
-/*  */
 
-body 
-{
+/* General */
+
+ul{
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+}
+
+img{
+    max-width: 100%;
+}
+
+/* Keyframes */
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOutDown {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(20px); }
+}
+
+/* Body */
+
+body {
     font-family: var(--body-font);
     background-color: var(--body-color);
     color: var(--text-color);
     line-height: 1.5;
+    background-image: 
+        linear-gradient(hsla(0, 6%, 14%, 0.9), hsla(0, 6%, 14%, 1)), /* Stronger dark overlay */
+        url('image3.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-blend-mode: multiply; /* Changed from overlay */
+    background-repeat: no-repeat;
 }
 
-a 
-{
-    text-decoration: none;
-}
-
-h1 
-{
-    color: var(--title-color);
-    font-weight: var(--weight-600);
-}
-
-h2 
-{
-    color: var(--title-color);
-    font-weight: var(--weight-600);
-}
-
-h3 
-{
-    color: var(--title-color);
-    font-weight: var(--weight-600);
-}
-
-/*  */
-
-.container 
-{
+.container {
     max-width: 1200px;
-    max-height: 2500px;
-    margin-inline: auto;
-    padding-inline: 1rem;
-    line-height: 1.78;
+    margin: 0 auto;
+    padding: 1rem;
 }
 
-/* Overview */
+/* Add-Ons */
 
-.overview 
-{
+.trail-only {
+    height: 3px;
+    width: 30px;
+    background: linear-gradient(
+        to left, 
+        white 0%,             /* strong white start */
+        white 40%,            /* still strong at 70% */
+        rgba(255, 255, 255, 0.4) 55%, /* fading out */
+        rgba(255, 255, 255, 0.3) 65%, /* fading out */
+        rgba(255, 255, 255, 0.2) 75%, /* fading out */
+        rgba(255, 255, 255, 0.1) 95%, /* barely there */
+        transparent 100%      /* fully disappears */
+    );
+    border-radius: 10px;
+} 
+
+/* Navigation */
+
+.nav {
+    display: flex;
+    height: calc(var(--header-height) + 2.25rem);
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navlogo {
+    color: var(--text-color);
+    font-size: 0.8rem;
+    font-weight: var(--weight-500);
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+}
+
+.navlist {
+    display: flex;
+    gap: 1.8rem;
+    margin-left: 25rem;
+}
+
+.navlink {
+    color: var(--text-color);
+    font-size: 0.6rem;
+    font-weight: var(--weight-500);
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    transition: all 0.3s ease;
+}
+
+.active, .navlink:hover {
+    color: white;
+}
+
+/* History */
+
+.history {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+}
+
+.history::-webkit-scrollbar {
+    display: none;
+}
+
+.historybody {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px;
+    animation: fadeInUp var(--transition-speed) var(--easing) forwards;
+    opacity: 0; /* Start hidden */
+}
+
+.historyleft {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    background-color:hsla(0, 6%, 14%, 0.9);
-    padding-block: 8rem 3rem;
-}
-
-.years 
-{
-    flex-direction: row;
     gap: 20px;
+    width: 320px;
 }
 
-.year 
-{
-    color: var(--lighter-text-color);
+.historytext, .historyaltext {
+    font-size: 0.6rem;
+}
+
+.historysmltext {
+    font-size: 0.6rem;
+    line-height: 15px;
+}
+
+.historysubtext {
+    font-size: 1.5rem;
+    font-weight: var(--weight-500);
+    text-transform: uppercase;
+}
+
+.historymiddle {
+    display: flex;
+    cursor: pointer;
+}
+
+.historycentury {
+    color: var(--lightest-text-color);
+    font-size: 15.6rem;
+    font-weight: var(--weight-600);
+    letter-spacing: -1rem;
+}
+
+.historyright {
+    display: flex;
+    flex-direction: row;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 1s ease, visibility 1s ease;
+}
+
+.historyimage {
+    width: 400px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.historyimgs {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    top: 260px;
+    right: -20px;
+}
+
+.historyimg {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    transition: all 0.3s ease, transform 0.2s ease;
+}
+
+.historyimg:hover {
+    transform: scale(1.05);
+    border: 2px solid var(--white);
+}
+
+/* Years */
+
+.year-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: opacity var(--transition-speed) var(--easing);
+}
+
+.subyear-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform var(--transition-speed) var(--easing);
+}
+
+/* Timeline */
+
+.timeline {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.subyears {
+    display: none;
+    gap: 1rem;
+    margin: 0.2rem 0;
+}
+
+.years {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.2rem;
+}
+
+.year-link, .subyear-link {
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--light-text-color);
     font-size: 0.6rem;
     font-family: var(--body-font);
+    font-weight: var(--weight-300);
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
-.year:hover 
-{
+.year-link:hover, .subyear-link:hover {
     color: var(--text-color);
-    transition: all 0.3s ease-in-out;
+    transform: translateY(-2px);
 }
+
+.year-link::after, .subyear-link::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.3s ease;
+}
+
+.year-link:hover::after, .subyear-link:hover::after {
+    width: 100%;
+}
+
+/* Active States */
+.year-content.active {
+    opacity: 1;
+}
+
+.subyear-content.active {
+    transform: translateX(0);
+}
+
+/* Exiting States */
+.year-content.exiting {
+    opacity: 0;
+}
+
+.subyear-content.exiting {
+    transform: translateX(-20px);
+}
+
+
