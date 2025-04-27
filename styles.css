@@ -59,13 +59,11 @@ body {
     background-color: var(--body-color);
     color: var(--text-color);
     line-height: 1.5;
-    background-image: 
-        linear-gradient(hsla(0, 6%, 14%, 0.9), hsla(0, 6%, 14%, 1)), /* Stronger dark overlay */
-        url('image3.jpg');
+    background-image: linear-gradient(hsla(0, 6%, 14%, 0.9), hsla(0, 6%, 14%, 1)), url('image3.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    background-blend-mode: multiply; /* Changed from overlay */
+    background-blend-mode: multiply;
     background-repeat: no-repeat;
 }
 
@@ -77,21 +75,110 @@ body {
 
 /* Add-Ons */
 
+/* Scroll */
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.scroll-progress {
+    height: 100%;
+    width: 0;
+    background: var(--text-color);
+    transition: width 0.2s ease;
+}
+
+/* Trail */
+
 .trail-only {
     height: 3px;
     width: 30px;
     background: linear-gradient(
         to left, 
-        white 0%,             /* strong white start */
-        white 40%,            /* still strong at 70% */
-        rgba(255, 255, 255, 0.4) 55%, /* fading out */
-        rgba(255, 255, 255, 0.3) 65%, /* fading out */
-        rgba(255, 255, 255, 0.2) 75%, /* fading out */
-        rgba(255, 255, 255, 0.1) 95%, /* barely there */
-        transparent 100%      /* fully disappears */
+        white 0%,             
+        white 40%,            
+        rgba(255, 255, 255, 0.4) 55%,
+        rgba(255, 255, 255, 0.3) 65%, 
+        rgba(255, 255, 255, 0.2) 75%, 
+        rgba(255, 255, 255, 0.1) 95%, 
+        transparent 100%
     );
     border-radius: 10px;
 } 
+
+/* Splash Screen Styles */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--body-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+}
+
+.splash-content {
+    text-align: center;
+    transform: scale(0.95);
+    animation: splashReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.splash-image {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.3s forwards;
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.15));
+}
+
+.splash-title {
+    color: var(--text-color);
+    font-size: 2rem;
+    margin-top: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: titleReveal 0.8s ease-out 0.6s forwards;
+    font-weight: var(--weight-300);
+    letter-spacing: 0.1rem;
+}
+
+.splash-progress {
+    width: 120px;
+    height: 2px;
+    background: rgba(255,255,255,0.2);
+    margin: 2rem auto 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.splash-progress::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0%;
+    background: var(--text-color);
+    animation: progressLoad 2.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+/* When loaded */
+
+body.loaded .splash-screen {
+    opacity: 0;
+    visibility: hidden;
+}
 
 /* Navigation */
 
@@ -247,29 +334,27 @@ body {
 
 .subyears {
     display: none;
-    gap: 1rem;
-    margin: 0.2rem 0;
+    gap: 1rem;    
 }
 
 .years {
     display: flex;
     gap: 1rem;
-    margin-top: 0.2rem;
 }
 
 .year-link, .subyear-link {
     cursor: pointer;
     text-decoration: none;
+    transition: all 0.3s ease;
     color: var(--light-text-color);
-    font-size: 0.6rem;
     font-family: var(--body-font);
     font-weight: var(--weight-300);
-    display: flex;
-    flex-direction: row;
+    font-size: 0.6rem;
     gap: 15px;
     align-items: center;
-    transition: all 0.3s ease;
+    flex-direction: row;
     position: relative;
+    display: flex;
 }
 
 .year-link:hover, .subyear-link:hover {
@@ -277,7 +362,7 @@ body {
     transform: translateY(-2px);
 }
 
-.year-link::after, .subyear-link::after {
+.year-link::after {
     content: '';
     position: absolute;
     bottom: -3px;
@@ -288,7 +373,7 @@ body {
     transition: width 0.3s ease;
 }
 
-.year-link:hover::after, .subyear-link:hover::after {
+.year-link:hover::after {
     width: 100%;
 }
 
@@ -310,4 +395,84 @@ body {
     transform: translateX(-20px);
 }
 
+/* Research */
+
+.research{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 100px;
+    padding-top: 10rem;
+    padding-bottom: 10rem;
+    position: relative;
+}
+
+.researcheader {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.researchtitle {
+    font-size: 3.5rem;
+    font-weight: var(--weight-500);
+    color: var(--text-color);
+    text-transform: uppercase;
+}
+
+.researchsubtitle{
+    font-size: 1.0rem;
+    font-weight: var(--weight-500);
+    color: var(--text-color);
+    text-transform: uppercase;  
+}
+
+.researchdescription {
+    font-size: 0.6rem;
+    line-height: 15px;
+}
+
+.researchlist {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.researchlist::-webkit-scrollbar {
+    display: none;
+}
+
+.researchitem {
+    flex: 0 0 300px;
+    scroll-snap-align: start;
+    padding: 1.5rem;
+    transition: transform 0.3s var(--easing);
+}
+
+.researchitem:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.085);
+}
+
+.researchtext {
+    font-size: 1.5rem;
+    font-weight: var(--weight-500);
+    color: var(--text-color);
+    text-transform: uppercase;
+}
+
+.researchlink {
+    font-size: 0.6rem;
+    line-height: 15px;
+    color: var(--light-text-color);
+}
+
+.researchlink:hover {
+    color: var(--text-color);
+}
 
