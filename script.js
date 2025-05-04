@@ -70,6 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (historyRight) {
                 // Find the main image within this container
                 const mainImage = historyRight.querySelector('.historyimage');
+                const mainImage2 = historyRight.querySelector('.historyimage2');
+
                 if (mainImage) {
                     // Update the main image source with the clicked thumbnail's source
                     mainImage.src = this.src;
@@ -79,6 +81,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         mainImage.style.opacity = '1';
                         mainImage.style.transition = 'opacity 0.3s ease';
+                    }, 50);
+                }
+                else if (mainImage2){
+                    // Update the main image source with the clicked thumbnail's source
+                    mainImage2.src = this.src;
+                    
+                    // Optional: Add a smooth transition effect
+                    mainImage2.style.opacity = '0';
+                    setTimeout(() => {
+                        mainImage2.style.opacity = '1';
+                        mainImage2.style.transition = 'opacity 0.3s ease';
                     }, 50);
                 }
             }
