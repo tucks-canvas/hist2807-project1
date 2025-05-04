@@ -1,3 +1,42 @@
+// Splash Video Controller
+function showSplashVideo() {
+    // Check localStorage for previous show
+    const past = localStorage.getItem('splashLastShown');
+    const now = new Date().getTime();
+    const oneDay = 2 * 1000; // 24 hours
+    
+    // Only show if never shown past or more than 1 day ago
+    if (!past || (now - past) > oneDay) {
+        const splashContainer = document.getElementById('splash-video-container');
+        const splashVideo = document.getElementById('splash-video');
+        
+        splashContainer.classList.remove('splash-hidden');
+        splashContainer.classList.add('splash-visible');
+        
+        splashVideo.play().then(() => {
+            // When video ends
+            splashVideo.onended = () => {
+                splashContainer.classList.remove('splash-visible');
+                splashContainer.classList.add('splash-hidden');
+                localStorage.setItem('splashLastShown', now.toString());
+            };
+            
+            // Escape key to skip
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    splashVideo.pause();
+                    splashContainer.classList.remove('splash-visible');
+                    splashContainer.classList.add('splash-hidden');
+                    localStorage.setItem('splashLastShown', now.toString());
+                }
+            });
+        }).catch(e => {
+            console.log("Splash video autoplay prevented", e);
+            splashContainer.classList.add('splash-hidden');
+        });
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize DOM elements
     const video = document.getElementById('bg-video');
@@ -173,4 +212,14 @@ document.addEventListener('DOMContentLoaded', () => {
             this.style.transform = 'scale(1)';
         });
     });
+
+    document.getElementById('skip-splash')?.addEventListener('click', () => {
+        const now = new Date().getTime();
+        localStorage.setItem('splashLastShown', now.toString());
+        document.getElementById('splash-video-container').classList.add('splash-hidden');
+        document.getElementById('splash-video').pause();
+    });
+
+    // Initialize splash video
+    showSplashVideo();
 });
