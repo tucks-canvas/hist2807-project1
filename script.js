@@ -3,7 +3,7 @@ function showSplashVideo() {
     // Check localStorage for previous show
     const last = localStorage.getItem('splashLastShown');
     const now = new Date().getTime();
-    const oneDay = 2 * 1000; // 24 hours
+    const oneDay = 24 * 60 * 60 * 1000; // 24 hours
     
     // Only show if never shown before or more than 1 day ago
     if (!last || (now - last) > oneDay) {
@@ -58,8 +58,6 @@ function showSplashVideo() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize splash video
-    showSplashVideo();
 
     // Initialize DOM elements
     const video = document.getElementById('bg-video');
@@ -70,17 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (video && muteBtn && muteIcon) {
         // Initialize with saved preference or default to muted
-        let isMuted = localStorage.getItem('videoMuted') !== 'false';
+        let isReferenceMuted = localStorage.getItem('videoMuted') !== 'true';
         
         // Set initial state
-        video.muted = isMuted;
+        video.muted = isReferenceMuted;
         updateButton();
         
         // Toggle on click
         muteBtn.addEventListener('click', function() {
-            isMuted = !isMuted;
-            video.muted = isMuted;
-            localStorage.setItem('videoMuted', isMuted);
+            isReferenceMuted = !isReferenceMuted;
+            video.muted = isReferenceMuted;
+            localStorage.setItem('videoMuted', isReferenceMuted);
             updateButton();
             
             // Button press animation
@@ -103,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             video.play().catch(e => {
                 console.log("Autoplay prevented, showing muted:", e);
                 video.muted = true;
-                isMuted = true;
+                isReferenceMuted = true;
                 localStorage.setItem('videoMuted', true);
                 updateButton();
                 video.play();
@@ -115,8 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
         video.addEventListener('canplay', playVideo);
         
         function updateButton() {
-            muteIcon.src = isMuted ? "icons/mute.png" : "icons/unmute.png";
-            muteBtn.setAttribute('aria-label', isMuted ? "Unmute sound" : "Mute sound");
+            muteIcon.src = isReferenceMuted ? "icons/mute.png" : "icons/unmute.png";
+            muteBtn.setAttribute('aria-label', isReferenceMuted ? "Unmute sound" : "Mute sound");
         }
     }
 
@@ -235,4 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.style.transform = 'scale(1)';
         });
     });
+
+    // Initialize splash video
+    showSplashVideo();
 });
