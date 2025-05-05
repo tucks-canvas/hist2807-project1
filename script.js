@@ -1,12 +1,12 @@
 // Splash Video Controller
 function showSplashVideo() {
     // Check localStorage for previous show
-    const past = localStorage.getItem('splashLastShown');
+    const last = localStorage.getItem('splashLastShown');
     const now = new Date().getTime();
     const oneDay = 2 * 1000; // 24 hours
     
-    // Only show if never shown past or more than 1 day ago
-    if (!past || (now - past) > oneDay) {
+    // Only show if never shown before or more than 1 day ago
+    if (!last || (now - last) > oneDay) {
         const splashContainer = document.getElementById('splash-video-container');
         const splashVideo = document.getElementById('splash-video');
         
@@ -38,6 +38,9 @@ function showSplashVideo() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize splash video
+    showSplashVideo();
+
     // Initialize DOM elements
     const video = document.getElementById('bg-video');
     const muteBtn = document.getElementById('mute-toggle');
@@ -220,6 +223,4 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('splash-video').pause();
     });
 
-    // Initialize splash video
-    showSplashVideo();
 });
