@@ -9,6 +9,11 @@ function showSplashVideo() {
     if (!last || (now - last) > oneDay) {
         const splashContainer = document.getElementById('splash-video-container');
         const splashVideo = document.getElementById('splash-video');
+        const soundToggle = document.getElementById('sound-toggle');
+        const skipBtn = document.getElementById('skip-splash')
+
+        splashVideo.muted = true;
+        let isMuted = true;
         
         splashContainer.classList.remove('splash-hidden');
         splashContainer.classList.add('splash-visible');
@@ -29,6 +34,21 @@ function showSplashVideo() {
                     splashContainer.classList.add('splash-hidden');
                     localStorage.setItem('splashLastShown', now.toString());
                 }
+            });
+
+            skipBtn?.addEventListener('click', () => {
+                const now = new Date().getTime();
+                localStorage.setItem('splashLastShown', now.toString());
+                splashContainer.classList.add('splash-hidden');
+                splashVideo.pause();
+            });
+        
+            soundToggle?.addEventListener('click', () => {
+                isMuted = !isMuted;
+                splashVideo.muted = isMuted;
+                soundToggle.innerHTML = isMuted 
+                  ? '<img src="icons/mute.png" alt="Toggle sound">'
+                  : '<img src="icons/unmute.png" alt="Toggle sound">';
             });
         }).catch(e => {
             console.log("Splash video autoplay prevented", e);
@@ -215,12 +235,4 @@ document.addEventListener('DOMContentLoaded', () => {
             this.style.transform = 'scale(1)';
         });
     });
-
-    document.getElementById('skip-splash')?.addEventListener('click', () => {
-        const now = new Date().getTime();
-        localStorage.setItem('splashLastShown', now.toString());
-        document.getElementById('splash-video-container').classList.add('splash-hidden');
-        document.getElementById('splash-video').pause();
-    });
-
 });

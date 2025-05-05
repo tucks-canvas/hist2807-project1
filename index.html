@@ -8,11 +8,17 @@
 
 <body>    
     <div id="splash-video-container" class="splash-hidden">
-        <video id="splash-video" muted>
-            <source src="videos/splash.mp4" type="video/mp4">
+        <video id="splash-video">
+          <source src="videos/splash.mp4" type="video/mp4">
         </video>
 
-        <button id="skip-splash" class="splash-btn">Skip</button>
+        <div class="splash-controls">
+            <button id="sound-toggle" class="splash-btn">
+                <img src="icons/mute.png" class="splash-icon" id="splash-icon" alt="Toggle sound">
+            </button>
+
+            <button id="skip-splash" class="splash-btn">Skip</button>
+        </div>
     </div>
 
     <section class="header" id="header">
