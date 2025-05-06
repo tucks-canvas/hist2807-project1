@@ -1,29 +1,46 @@
 // Splash Video Controller
 function showSplashVideo() {
     // Check localStorage for previous show
-    const last = localStorage.getItem('splashLastShown');
+    const before = localStorage.getItem('lastSplash');
     const now = new Date().getTime();
-    const oneDay = 24 * 60 * 60 * 1000; // 24 hours
+    const oneDay = 24 * 60  * 60 * 1000; // 24 hours
     
     // Only show if never shown before or more than 1 day ago
-    if (!last || (now - last) > oneDay) {
+    if (!before || (now - before) > oneDay) {
         const splashContainer = document.getElementById('splash-video-container');
         const splashVideo = document.getElementById('splash-video');
         const soundToggle = document.getElementById('sound-toggle');
-        const skipBtn = document.getElementById('skip-splash')
+        const skipBtn = document.getElementById('skip-splash');
 
         splashVideo.muted = true;
         let isMuted = true;
         
         splashContainer.classList.remove('splash-hidden');
         splashContainer.classList.add('splash-visible');
+
+        // MOVE SKIP BUTTON LISTENER OUTSIDE OF PLAY PROMISE
+        skipBtn?.addEventListener('click', () => {
+            const now = new Date().getTime();
+            localStorage.setItem('lastSplash', now.toString());
+            splashContainer.classList.add('splash-hidden');
+            splashVideo.pause();
+        });
+
+        // MOVE SOUND TOGGLE OUTSIDE TOO
+        soundToggle?.addEventListener('click', () => {
+            isMuted = !isMuted;
+            splashVideo.muted = isMuted;
+            soundToggle.innerHTML = isMuted 
+              ? '<img src="icons/mute.png" alt="Toggle sound">'
+              : '<img src="icons/unmute.png" alt="Toggle sound">';
+        });
         
         splashVideo.play().then(() => {
             // When video ends
             splashVideo.onended = () => {
                 splashContainer.classList.remove('splash-visible');
                 splashContainer.classList.add('splash-hidden');
-                localStorage.setItem('splashLastShown', now.toString());
+                localStorage.setItem('lastSplash', now.toString());
             };
             
             // Escape key to skip
@@ -32,23 +49,8 @@ function showSplashVideo() {
                     splashVideo.pause();
                     splashContainer.classList.remove('splash-visible');
                     splashContainer.classList.add('splash-hidden');
-                    localStorage.setItem('splashLastShown', now.toString());
+                    localStorage.setItem('lastSplash', now.toString());
                 }
-            });
-
-            skipBtn?.addEventListener('click', () => {
-                const now = new Date().getTime();
-                localStorage.setItem('splashLastShown', now.toString());
-                splashContainer.classList.add('splash-hidden');
-                splashVideo.pause();
-            });
-        
-            soundToggle?.addEventListener('click', () => {
-                isMuted = !isMuted;
-                splashVideo.muted = isMuted;
-                soundToggle.innerHTML = isMuted 
-                  ? '<img src="icons/mute.png" alt="Toggle sound">'
-                  : '<img src="icons/unmute.png" alt="Toggle sound">';
             });
         }).catch(e => {
             console.log("Splash video autoplay prevented", e);
